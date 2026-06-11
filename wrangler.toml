@@ -5,4 +5,4 @@ compatibility_date = "2026-06-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "mitbringliste"
-database_id = "REPLACE_WITH_DATABASE_ID"
+database_id = "eae9a6e0-375f-4175-974f-4db26fa17044"
