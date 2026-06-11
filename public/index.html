@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Känguruh Klasse Sommerfest 2026</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Mitbringliste</p>
+          <h1>Känguruh Klasse Sommerfest 2026</h1>
+        </div>
+        <div class="status" id="status" aria-live="polite">Verbunden</div>
+      </header>
+
+      <section class="list-panel" aria-labelledby="form-title">
+        <h2 id="form-title">Eintragen</h2>
+        <form class="entry-form" id="entry-form">
+          <label>
+            <span>Was?</span>
+            <input id="item" name="item" autocomplete="off" maxlength="120" required placeholder="z. B. Salat">
+          </label>
+          <label>
+            <span>Menge</span>
+            <input id="quantity" name="quantity" autocomplete="off" maxlength="80" required placeholder="z. B. 1 Schüssel">
+          </label>
+          <label>
+            <span>Wer?</span>
+            <input id="person" name="person" autocomplete="name" maxlength="80" required placeholder="Name">
+          </label>
+          <button type="submit" class="primary-button" aria-label="Eintrag hinzufügen">
+            <span aria-hidden="true">+</span>
+            <span>Hinzufügen</span>
+          </button>
+        </form>
+      </section>
+
+      <section class="table-section" aria-labelledby="list-title">
+        <div class="table-heading">
+          <h2 id="list-title">Liste</h2>
+          <span id="count">0 Einträge</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Was?</th>
+                <th scope="col">Menge</th>
+                <th scope="col">Wer?</th>
+                <th scope="col" class="action-col">Aktion</th>
+              </tr>
+            </thead>
+            <tbody id="items"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state">Noch keine Einträge.</div>
+        </div>
+      </section>
+    </main>
+
+    <template id="row-template">
+      <tr>
+        <td data-label="Was?">
+          <input class="cell-input" name="item" maxlength="120" required>
+        </td>
+        <td data-label="Menge">
+          <input class="cell-input" name="quantity" maxlength="80" required>
+        </td>
+        <td data-label="Wer?">
+          <input class="cell-input" name="person" maxlength="80" required>
+        </td>
+        <td class="row-actions" data-label="Aktion">
+          <button type="button" class="delete-button" aria-label="Eintrag löschen" title="Eintrag löschen">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+              <path d="M3 6h18"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M10 11v6"></path>
+              <path d="M14 11v6"></path>
+            </svg>
+          </button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
