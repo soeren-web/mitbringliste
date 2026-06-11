@@ -14,7 +14,7 @@ let saveTimers = new Map();
 let editingId = null;
 
 function setStatus(text, offline = false) {
-  statusEl.textContent = text;
+  statusEl.textContent = offline ? text : "";
   statusEl.classList.toggle("offline", offline);
 }
 
