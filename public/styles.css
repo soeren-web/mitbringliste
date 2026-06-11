@@ -273,6 +273,17 @@ tbody tr:last-child td {
   background: #ffe0e0;
 }
 
+.text-row .delete-button {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+}
+
+.text-row .delete-button svg {
+  width: 14px;
+  height: 14px;
+}
+
 .done-button {
   display: inline-flex;
   align-items: center;
@@ -386,7 +397,7 @@ tbody tr:last-child td {
 
   tr.text-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content 36px;
+    grid-template-columns: minmax(0, 1fr) max-content 28px;
     grid-template-rows: auto auto;
     column-gap: 10px;
     align-items: center;
@@ -412,10 +423,14 @@ tbody tr:last-child td {
     text-align: right;
   }
 
-  .text-row .cell-quantity,
-  .text-row .cell-person {
+  .text-row .cell-quantity {
     color: var(--muted);
     font-size: 0.82rem;
+  }
+
+  .text-row .cell-person {
+    color: var(--text);
+    font-size: 0.92rem;
   }
 
   .text-row .row-actions {
@@ -425,9 +440,9 @@ tbody tr:last-child td {
   }
 
   .text-row .delete-button {
-    width: 34px;
-    min-width: 34px;
-    height: 34px;
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
   }
 
   tr.edit-row {
