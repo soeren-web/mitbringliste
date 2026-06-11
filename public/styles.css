@@ -210,6 +210,11 @@ td {
   border-bottom: 1px solid rgba(213, 228, 242, 0.86);
   text-align: left;
   vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+th:first-child {
+  width: 40%;
 }
 
 .text-row {
@@ -236,25 +241,21 @@ tbody tr:last-child td {
   border-bottom: 0;
 }
 
-.action-col {
-  width: 100px;
+.edit-row td {
+  background: var(--surface-soft);
 }
 
-.cell-input {
-  height: 38px;
-  border-color: transparent;
-  background: transparent;
-  font-size: 0.98rem;
+.edit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr) minmax(0, 0.9fr) auto;
+  gap: 10px;
+  align-items: end;
+  padding: 4px 0;
 }
 
-.cell-input:hover,
-.cell-input:focus {
-  border-color: var(--line);
-  background: #fff;
-}
-
-.row-actions {
-  text-align: center;
+.edit-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .delete-button {
@@ -271,17 +272,6 @@ tbody tr:last-child td {
 
 .delete-button:hover {
   background: #ffe0e0;
-}
-
-.text-row .delete-button {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-}
-
-.text-row .delete-button svg {
-  width: 14px;
-  height: 14px;
 }
 
 .done-button {
@@ -303,8 +293,11 @@ tbody tr:last-child td {
   background: #d3e7ff;
 }
 
-.edit-row .delete-button {
-  margin-left: 6px;
+.edit-actions .done-button,
+.edit-actions .delete-button {
+  width: 46px;
+  min-width: 46px;
+  height: 46px;
 }
 
 .delete-button svg,
@@ -370,121 +363,26 @@ tbody tr:last-child td {
     padding: 15px 16px;
   }
 
-  table,
-  thead,
-  tbody,
-  tr,
   th,
   td {
-    display: block;
+    padding: 9px 10px;
   }
 
-  thead {
-    display: none;
-  }
-
-  tr {
-    border-bottom: 1px solid rgba(213, 228, 242, 0.86);
-  }
-
-  tbody tr:last-child {
-    border-bottom: 0;
+  th {
+    font-size: 0.72rem;
   }
 
   td {
-    border-bottom: 0;
-  }
-
-  tr.text-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content 28px;
-    grid-template-rows: auto auto;
-    column-gap: 10px;
-    align-items: center;
-    padding: 8px 14px;
-  }
-
-  .text-row td {
-    padding: 0;
-  }
-
-  .text-row .cell-item {
-    grid-area: 1 / 1 / 2 / 3;
-    font-size: 0.95rem;
-    font-weight: 600;
-  }
-
-  .text-row .cell-quantity {
-    grid-area: 2 / 1 / 3 / 2;
-  }
-
-  .text-row .cell-person {
-    grid-area: 2 / 2 / 3 / 3;
-    text-align: right;
-  }
-
-  .text-row .cell-quantity {
-    color: var(--muted);
-    font-size: 0.82rem;
-  }
-
-  .text-row .cell-person {
-    color: var(--text);
     font-size: 0.92rem;
   }
 
-  .text-row .row-actions {
-    grid-area: 1 / 3 / 3 / 4;
-    display: flex;
+  .edit-grid {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .edit-actions {
     justify-content: flex-end;
-  }
-
-  .text-row .delete-button {
-    width: 28px;
-    min-width: 28px;
-    height: 28px;
-  }
-
-  tr.edit-row {
-    padding: 12px 16px;
-  }
-
-  .edit-row td {
-    display: grid;
-    grid-template-columns: 68px minmax(0, 1fr);
-    gap: 10px;
-    align-items: center;
-    padding: 7px 0;
-  }
-
-  .edit-row td::before {
-    content: attr(data-label);
-    color: var(--muted);
-    font-size: 0.82rem;
-    font-weight: 600;
-  }
-
-  .edit-row .row-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-
-  .edit-row .delete-button {
-    margin-left: 0;
-  }
-
-  .cell-input {
-    height: 42px;
-    border-color: var(--line);
-    background: #fff;
-  }
-
-  .edit-row .delete-button,
-  .done-button {
-    width: 42px;
-    min-width: 42px;
-    height: 42px;
   }
 }
 
@@ -501,11 +399,8 @@ tbody tr:last-child td {
     padding: 14px;
   }
 
-  tr.edit-row {
-    padding: 11px 14px;
-  }
-
-  .edit-row td {
-    grid-template-columns: 62px minmax(0, 1fr);
+  th,
+  td {
+    padding: 9px 8px;
   }
 }

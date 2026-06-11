@@ -50,10 +50,6 @@ function buildTextRow(entry) {
   row.addEventListener("keydown", (event) => {
     if (event.key === "Enter") startEditing(entry.id);
   });
-  row.querySelector(".delete-button").addEventListener("click", (event) => {
-    event.stopPropagation();
-    deleteRow(entry.id);
-  });
 
   return row;
 }
