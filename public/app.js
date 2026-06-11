@@ -139,18 +139,14 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-function connectEvents() {
-  const source = new EventSource("/events");
+const POLL_INTERVAL_MS = 5000;
 
-  source.addEventListener("open", () => setStatus("Verbunden"));
-  source.addEventListener("sync", (event) => {
-    render(JSON.parse(event.data));
-    setStatus("Verbunden");
-  });
-  source.addEventListener("error", () => {
-    setStatus("Verbindung wird neu aufgebaut", true);
-  });
+function startPolling() {
+  setInterval(() => {
+    if (activeEdits.size > 0 || saveTimers.size > 0) return;
+    loadItems();
+  }, POLL_INTERVAL_MS);
 }
 
 loadItems();
-connectEvents();
+startPolling();

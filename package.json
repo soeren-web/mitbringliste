@@ -2,10 +2,11 @@
   "name": "sommerfest-mitbringliste",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Offene kollaborative Mitbringliste fuer ein Sommerfest.",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "npx wrangler pages dev",
+    "deploy": "npx wrangler pages deploy"
   },
   "engines": {
     "node": ">=20"

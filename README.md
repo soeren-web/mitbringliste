@@ -1,15 +1,30 @@
 # Sommerfest Mitbringliste
 
-Eine einfache offene Liste fuer ein Sommerfest. Alle mit dem Link koennen Eintraege hinzufuegen, bearbeiten und loeschen.
+Eine einfache offene Liste fuer ein Sommerfest. Alle mit dem Link koennen Eintraege hinzufuegen, bearbeiten und loeschen. Laeuft auf Cloudflare Pages (Functions + D1).
 
-## Starten
+## Einmalige Einrichtung
+
+1. D1-Datenbank anlegen und die ausgegebene `database_id` in `wrangler.toml` eintragen:
+
+   ```bash
+   npx wrangler d1 create mitbringliste
+   ```
+
+2. Schema anwenden (einmal remote, einmal fuer die lokale Entwicklung):
+
+   ```bash
+   npx wrangler d1 execute mitbringliste --remote --file=schema.sql
+   npx wrangler d1 execute mitbringliste --local --file=schema.sql
+   ```
+
+3. Repo in Cloudflare Pages verbinden. Build-Einstellungen: kein Build-Befehl, Output-Verzeichnis `public` (wird aus `wrangler.toml` uebernommen). Das D1-Binding `DB` kommt ebenfalls aus `wrangler.toml`.
+
+## Lokal entwickeln
 
 ```bash
-npm start
+npm run dev
 ```
-
-Danach die angezeigte lokale Adresse im Browser oeffnen. Wenn Port 3000 schon belegt ist, nimmt die App automatisch den naechsten freien Port.
 
 ## Daten
 
-Die Eintraege werden in `data/items.json` gespeichert. Fuer eine gemeinsam nutzbare Internet-Adresse muss der Ordner auf einem kleinen Node.js-Host laufen, zum Beispiel Render, Railway, Fly.io oder einem eigenen Server. Es gibt bewusst kein Login und keine Rechteverwaltung.
+Die Eintraege liegen in der D1-Tabelle `items`. Aenderungen anderer Gaeste werden alle 5 Sekunden per Polling abgeholt. Es gibt bewusst kein Login und keine Rechteverwaltung.
