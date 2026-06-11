@@ -205,10 +205,23 @@ table {
 
 th,
 td {
-  padding: 12px 14px;
+  padding: 10px 14px;
   border-bottom: 1px solid rgba(213, 228, 242, 0.86);
   text-align: left;
   vertical-align: middle;
+}
+
+.text-row {
+  cursor: pointer;
+}
+
+.text-row:hover {
+  background: var(--surface-soft);
+}
+
+.text-row:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
 }
 
 th {
@@ -223,7 +236,7 @@ tbody tr:last-child td {
 }
 
 .action-col {
-  width: 76px;
+  width: 100px;
 }
 
 .cell-input {
@@ -259,7 +272,31 @@ tbody tr:last-child td {
   background: #ffe0e0;
 }
 
-.delete-button svg {
+.done-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  padding: 0;
+  cursor: pointer;
+}
+
+.done-button:hover {
+  background: #d3e7ff;
+}
+
+.edit-row .delete-button {
+  margin-left: 6px;
+}
+
+.delete-button svg,
+.done-button svg {
   display: block;
   fill: none;
   stroke: currentColor;
@@ -335,7 +372,6 @@ tbody tr:last-child td {
   }
 
   tr {
-    padding: 12px 16px;
     border-bottom: 1px solid rgba(213, 228, 242, 0.86);
   }
 
@@ -344,19 +380,82 @@ tbody tr:last-child td {
   }
 
   td {
+    border-bottom: 0;
+  }
+
+  tr.text-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content 36px;
+    grid-template-rows: auto auto;
+    column-gap: 10px;
+    align-items: center;
+    padding: 8px 14px;
+  }
+
+  .text-row td {
+    padding: 0;
+  }
+
+  .text-row .cell-item {
+    grid-area: 1 / 1 / 2 / 3;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .text-row .cell-quantity {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  .text-row .cell-person {
+    grid-area: 2 / 2 / 3 / 3;
+    text-align: right;
+  }
+
+  .text-row .cell-quantity,
+  .text-row .cell-person {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .text-row .row-actions {
+    grid-area: 1 / 3 / 3 / 4;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .text-row .delete-button {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+  }
+
+  tr.edit-row {
+    padding: 12px 16px;
+  }
+
+  .edit-row td {
     display: grid;
     grid-template-columns: 68px minmax(0, 1fr);
     gap: 10px;
     align-items: center;
-    border-bottom: 0;
     padding: 7px 0;
   }
 
-  td::before {
+  .edit-row td::before {
     content: attr(data-label);
     color: var(--muted);
     font-size: 0.82rem;
     font-weight: 600;
+  }
+
+  .edit-row .row-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .edit-row .delete-button {
+    margin-left: 0;
   }
 
   .cell-input {
@@ -365,11 +464,8 @@ tbody tr:last-child td {
     background: #fff;
   }
 
-  .row-actions {
-    text-align: left;
-  }
-
-  .delete-button {
+  .edit-row .delete-button,
+  .done-button {
     width: 42px;
     min-width: 42px;
     height: 42px;
@@ -389,11 +485,11 @@ tbody tr:last-child td {
     padding: 14px;
   }
 
-  tr {
+  tr.edit-row {
     padding: 11px 14px;
   }
 
-  td {
+  .edit-row td {
     grid-template-columns: 62px minmax(0, 1fr);
   }
 }

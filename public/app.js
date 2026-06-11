@@ -1,13 +1,17 @@
 const form = document.querySelector("#entry-form");
 const tableBody = document.querySelector("#items");
 const rowTemplate = document.querySelector("#row-template");
+const editRowTemplate = document.querySelector("#edit-row-template");
 const emptyState = document.querySelector("#empty-state");
 const statusEl = document.querySelector("#status");
 const countEl = document.querySelector("#count");
 
+const FIELDS = ["item", "quantity", "person"];
+
 let items = [];
 let activeEdits = new Map();
 let saveTimers = new Map();
+let editingId = null;
 
 function setStatus(text, offline = false) {
   statusEl.textContent = text;
@@ -20,36 +24,79 @@ function itemLabel(count) {
 
 function render(nextItems) {
   items = nextItems;
-  const focused = document.activeElement;
-  const focusedRow = focused?.closest?.("tr")?.dataset.id;
-  const focusedName = focused?.name;
+  const focusedName = document.activeElement?.name;
 
   tableBody.innerHTML = "";
   emptyState.classList.toggle("visible", items.length === 0);
   countEl.textContent = itemLabel(items.length);
 
   for (const entry of items) {
-    const row = rowTemplate.content.firstElementChild.cloneNode(true);
-    row.dataset.id = entry.id;
-
-    for (const field of ["item", "quantity", "person"]) {
-      const input = row.querySelector(`[name="${field}"]`);
-      input.value = activeEdits.get(`${entry.id}:${field}`) ?? entry[field] ?? "";
-      input.addEventListener("input", () => {
-        activeEdits.set(`${entry.id}:${field}`, input.value);
-        scheduleSave(entry.id);
-      });
-      input.addEventListener("blur", () => saveRow(entry.id));
-    }
-
-    row.querySelector(".delete-button").addEventListener("click", () => deleteRow(entry.id));
-    tableBody.append(row);
+    tableBody.append(entry.id === editingId ? buildEditRow(entry) : buildTextRow(entry));
   }
 
-  if (focusedRow && focusedName) {
-    const nextFocus = tableBody.querySelector(`tr[data-id="${focusedRow}"] [name="${focusedName}"]`);
-    nextFocus?.focus();
+  if (editingId && focusedName) {
+    tableBody.querySelector(`tr[data-id="${editingId}"] [name="${focusedName}"]`)?.focus();
   }
+}
+
+function buildTextRow(entry) {
+  const row = rowTemplate.content.firstElementChild.cloneNode(true);
+  row.dataset.id = entry.id;
+  row.querySelector(".cell-item").textContent = entry.item;
+  row.querySelector(".cell-quantity").textContent = entry.quantity;
+  row.querySelector(".cell-person").textContent = entry.person;
+
+  row.addEventListener("click", () => startEditing(entry.id));
+  row.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") startEditing(entry.id);
+  });
+  row.querySelector(".delete-button").addEventListener("click", (event) => {
+    event.stopPropagation();
+    deleteRow(entry.id);
+  });
+
+  return row;
+}
+
+function buildEditRow(entry) {
+  const row = editRowTemplate.content.firstElementChild.cloneNode(true);
+  row.dataset.id = entry.id;
+
+  for (const field of FIELDS) {
+    const input = row.querySelector(`[name="${field}"]`);
+    input.value = activeEdits.get(`${entry.id}:${field}`) ?? entry[field] ?? "";
+    input.addEventListener("input", () => {
+      activeEdits.set(`${entry.id}:${field}`, input.value);
+      scheduleSave(entry.id);
+    });
+    input.addEventListener("blur", () => saveRow(entry.id));
+  }
+
+  row.querySelector(".done-button").addEventListener("click", () => finishEditing(entry.id));
+  row.querySelector(".delete-button").addEventListener("click", () => {
+    editingId = null;
+    deleteRow(entry.id);
+  });
+
+  return row;
+}
+
+function startEditing(id) {
+  if (editingId === id) return;
+  editingId = id;
+  render(items);
+  tableBody.querySelector(`tr[data-id="${id}"] [name="item"]`)?.focus();
+}
+
+async function finishEditing(id) {
+  await saveRow(id);
+  clearTimeout(saveTimers.get(id));
+  saveTimers.delete(id);
+  for (const field of FIELDS) {
+    activeEdits.delete(`${id}:${field}`);
+  }
+  editingId = null;
+  render(items);
 }
 
 async function requestJson(url, options = {}) {
@@ -92,6 +139,8 @@ async function saveRow(id) {
   clearTimeout(saveTimers.get(id));
   saveTimers.delete(id);
 
+  if (!FIELDS.some((field) => activeEdits.has(`${id}:${field}`))) return;
+
   const edited = getEditedEntry(id);
   if (!edited || !edited.item.trim() || !edited.quantity.trim() || !edited.person.trim()) return;
 
@@ -101,7 +150,7 @@ async function saveRow(id) {
       body: JSON.stringify(edited)
     });
 
-    for (const field of ["item", "quantity", "person"]) {
+    for (const field of FIELDS) {
       activeEdits.delete(`${id}:${field}`);
     }
     render(items.map((entry) => (entry.id === id ? updated : entry)));
@@ -143,7 +192,7 @@ const POLL_INTERVAL_MS = 5000;
 
 function startPolling() {
   setInterval(() => {
-    if (activeEdits.size > 0 || saveTimers.size > 0) return;
+    if (editingId || activeEdits.size > 0 || saveTimers.size > 0) return;
     loadItems();
   }, POLL_INTERVAL_MS);
 }
