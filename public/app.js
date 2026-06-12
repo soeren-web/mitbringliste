@@ -147,9 +147,11 @@ async function saveRow(id) {
     });
 
     for (const field of FIELDS) {
-      activeEdits.delete(`${id}:${field}`);
+      if (activeEdits.get(`${id}:${field}`) === edited[field]) {
+        activeEdits.delete(`${id}:${field}`);
+      }
     }
-    render(items.map((entry) => (entry.id === id ? updated : entry)));
+    items = items.map((entry) => (entry.id === id ? updated : entry));
     setStatus("Gespeichert");
   } catch {
     setStatus("Nicht gespeichert", true);
